@@ -1,0 +1,24 @@
+#!/bin/bash
+# Automatically upload file $1 to $2
+
+# Test the Arguments
+Num_Arg = "$#"
+if [ $Num_Arg -lt 2 ]; then
+echo -ne "Usage: $0 file1 file2 file3 ... filen upload_dir\n"
+fi
+
+# Upload file automatically
+ftp -i -in <<EOF
+open 211.64.130.238
+user haiyong haiyong
+!echo "Welcome to haiyong:haiyong@211.64.130.238\n"
+!echo "Upload file $1 to $2\n"
+cd $$Num_Arg
+for ((i=1; i<$Num_Arg; i++));
+{
+put $i;
+}
+!echo "Done"
+!echo "Bye"
+EOF
+

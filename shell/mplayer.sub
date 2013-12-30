@@ -1,0 +1,36 @@
+#  -*- Sh -*- 
+# 
+# mplayer.sub - using MPlayer with subtitle loaded automatically.
+# 
+# Copyright (C) 2007 Haiyong Zheng (flyzhy.org@gmail.com).
+# 
+# Author          : Haiyong Zheng
+# Created On      : Tue Nov 20 12:52:31 2007
+# Last Modified By: Haiyong Zheng
+# Last Modified On: Wed Nov 21 17:42:12 2007
+# Update Count    : 25
+# 
+# HISTORY
+# 
+MPLAYER=/opt/mplayer/bin/mplayer
+VIDEO_FULLNAME=$1
+VIDEO_EXT=${VIDEO_FULLNAME##*.}
+VIDEO_NAME=${VIDEO_FULLNAME%.$VIDEO_EXT}
+#VIDEO_CHS_SUB=${VIDEO_NAME}.chs.srt
+
+#echo ${VIDEO_FULLNAME}
+#echo ${VIDEO_EXT}
+#echo ${VIDEO_NAME}
+#echo ${VIDEO_CHS_SUB}
+
+if [ -f "${VIDEO_NAME}.chs.srt" ]; then
+    ${MPLAYER} "$@" -sub "${VIDEO_NAME}.chs.srt"
+elif [ -f "${VIDEO_NAME}.CHS.srt" ]; then
+    ${MPLAYER} "$@" -sub "${VIDEO_NAME}.CHS.srt"
+elif [ -f "${VIDEO_NAME}.chs.SRT" ]; then
+    ${MPLAYER} "$@" -sub "${VIDEO_NAME}.chs.SRT"
+elif [ -f "${VIDEO_NAME}.CHS.SRT" ]; then
+    ${MPLAYER} "$@" -sub "${VIDEO_NAME}.CHS.SRT"
+else
+    ${MPLAYER} "$@"
+fi

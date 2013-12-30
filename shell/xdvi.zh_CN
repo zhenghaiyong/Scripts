@@ -1,0 +1,17 @@
+#!/bin/sh
+#  -*- Sh -*- 
+# 
+# xdvi.zh_CN - 
+# 
+# Copyright (C) 2007 Haiyong Zheng (flyzhy.org@gmail.com).
+# 
+# Author          : Haiyong Zheng
+# Created On      : Sun Nov 25 03:02:37 2007
+# Last Modified By: Haiyong Zheng
+# Last Modified On: Sun Nov 25 03:03:23 2007
+# Update Count    : 1
+# 
+# HISTORY
+# 
+export LC_CTYPE=en_US
+exec /usr/share/texmf/bin/xdvi "$@"

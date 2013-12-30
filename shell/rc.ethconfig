@@ -1,0 +1,42 @@
+#!/bin/sh
+#  -*- Sh -*- 
+# 
+# rc.ethconfig - config the ethernet according to the file /etc/rc.d/rc.inet1.conf.
+# 
+# Copyright (C) 2007 Haiyong Zheng (flyzhy.org@gmail.com).
+# 
+# Author          : Haiyong Zheng
+# Created On      : Thu Nov 15 14:38:00 2007
+# Last Modified By: Haiyong Zheng
+# Last Modified On: Wed Nov 21 11:56:14 2007
+# Update Count    : 8
+# 
+# HISTORY
+# 
+/usr/bin/ls -l /etc/rc.d/rc.inet1.conf | grep dhcp
+if [ $? -eq 0 ]; then
+    echo -ne "\t\t####### DHCP #######\n"
+fi
+
+/usr/bin/ls -l /etc/rc.d/rc.inet1.conf | grep home
+if [ $? -eq 0 ]; then
+    echo -ne "\t\t####### HOME #######\n"
+    echo -ne "Starting PPPoE ..."
+    /usr/sbin/pppoe-start
+fi
+
+/usr/bin/ls -l /etc/rc.d/rc.inet1.conf | grep newstar
+if [ $? -eq 0 ]; then
+    echo -ne "\t\t####### NewStar #######\n"
+    echo -ne "Adding route ..."
+    /sbin/route add -net 222.195.0.0 netmask 255.255.0.0 gw 192.168.1.253
+    /sbin/route add -net 211.64.0.0 netmask 255.255.0.0 gw 192.168.1.253
+    /sbin/route add -net 211.87.0.0 netmask 255.255.0.0 gw 192.168.1.253
+    export http_proxy=222.195.148.225:3128
+fi
+
+/usr/bin/ls -l /etc/rc.d/rc.inet1.conf | grep ipl
+if [ $? -eq 0 ]; then
+    echo -ne "\t\t####### IPL #######\n"
+    export http_proxy=222.195.148.225:3128
+fi

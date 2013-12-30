@@ -1,0 +1,17 @@
+#!/bin/sh
+#  -*- Sh -*- 
+# 
+# emacs.zh_CN - 
+# 
+# Copyright (C) 2007 Haiyong Zheng (flyzhy.org@gmail.com).
+# 
+# Author          : Haiyong Zheng
+# Created On      : Fri Nov 16 15:52:32 2007
+# Last Modified By: Haiyong Zheng
+# Last Modified On: Fri Nov 16 15:53:22 2007
+# Update Count    : 2
+# 
+# HISTORY
+# 
+export LC_CTYPE=zh_CN
+exec /usr/bin/emacs "$@"

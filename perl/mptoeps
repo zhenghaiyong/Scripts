@@ -1,0 +1,221 @@
+#!/usr/bin/perl -w
+
+# This script compiles any metapost source file given as
+# arguments on the command line, and produces corresponding
+# encapsulated postscript file(s) (one eps file per beginfig()).
+# that can be viewed (with fonts included) with Ghostscript
+# or included into a LaTeX document and previewed under xdvi.
+#
+# usage   : mptoeps file1 [...files]
+# e. g.   : mptoeps *.mp
+#
+# Auteur : L. Klinger/crpp --- feb 2000
+#          M. Jaegermann       jan 2001 [fixed perl horrors]
+#
+# history
+#
+# jan,  8, 2001 : M. Jaegermann rewrote all in a more perlish way
+# jan,  9, 2001 : M. Jaegermann handled metapost errors correctly
+# jan,  9, 2001 : L. Klinger got rid of geometry package for LaTeX
+
+use strict;
+
+my $me;
+($me = $0) =~ s,.*/,,;
+
+die "usage: $me mp_file1 [mp_file2 ...]\n" .
+    "\tinput files contain Metapost code.\n" unless @ARGV;
+
+my ($file, $basename, $basepath);
+
+# does this script run under Unix or under Windows ?
+my $win = 1;
+$win = 0 unless ( $^O eq 'windows' );
+
+
+# run through all mp files given as argument to the script
+foreach $file (@ARGV) {
+
+  # get filename, with .mp extension (which is added if not present)
+  ( $basename = $file ) =~ s/\.mp$//;
+  $file = "${basename}.mp";
+
+  die "file $file doesn't exist.\n" unless -e $file;
+
+  # figure out path to file
+  if ( $file =~ /\/([^\/]+.mp)$/ ) {
+    $basepath = $`; 
+  } else {
+    $basepath = "";
+  }
+
+  my $rv;
+  # call metapost...
+  if ( $win == 0 ) {
+    if ( 0 != ( $rv = system "echo x | mpost $file > .TMPMETAPOST" )) {
+      system "cat", ".TMPMETAPOST";
+      system "rm", "-f", ".TMPMETAPOST";
+      exit;
+    }
+  } else {
+    if ( 0 != ( $rv = system "echo x | mpost $file > .TMPMETAPOST" )) {
+      system "type", ".TMPMETAPOST";
+      system "del", ".TMPMETAPOST";
+      exit;
+    }
+  }
+
+  # open metapost log in order to find out how many files were produced
+  my $logfile = $basename.'.log';
+  open  LOG, $logfile or die "cannot open $logfile; $!\n";
+
+  my $line;
+  while ($line = <LOG>) {
+    last if $line =~ /written/;
+    die "cannot find 'written' line in $logfile\n" if eof LOG;
+  }
+  close(LOG);
+
+  my ($nfig, $start, $i);
+  ($nfig, undef, undef, undef, $start, undef) = split ' ', $line, 6;
+  # all this, because first beginfig(?) in metapost source may be
+  # beginfig(n), n > 1. So, $start will be n.
+  $start =~ s/^.*\.//;
+
+  # for each metapost-ps, include it into a LaTeX file to get corresponding
+  # eps
+  for $i ($start .. $start + $nfig - 1) {
+    $file = "$basename.$i";
+    print "$file... ";
+    # open metapost ps to find picture size
+    open PSF, $file or die "cannot read $file :$!\n";
+    while ( $line = <PSF> ) {
+      last if $line =~ /%%BoundingBox: /;
+      die "can't find BoundingBox in $file\n" if eof PSF;
+    }
+    close(PSF);
+    # convert size from pt to mm (why? I can't remember :o)
+    my ($x0, $y0, $x1, $y1, $width, $height);
+    (undef, $x0, $y0, $x1, $y1, undef) = split ' ', $line, 6;
+    $width  = ($x1 - $x0) * 0.3515 + 1;
+    $height = ($y1 - $y0) * 0.3515 + 1;
+    $height = 5 if $height < 5;
+
+
+    # create scratch LaTeX file containing only the ps figure
+    my $basetex = 'epsmaker';
+    my $texfile = "${basetex}.tex";
+    open LATEXF, ">$texfile" or die "cannot write to $texfile: $!\n";
+
+    print LATEXF << "EOD";
+\\documentclass{article}
+\\usepackage[dvips]{graphicx}
+\\textwidth ${width}mm
+\\textheight ${height}mm
+
+\\begin{document}
+\\pagestyle{empty}
+\\parindent 0pt
+\\includegraphics{${file}}
+\\end{document}
+EOD
+    close LATEXF;
+
+    # compile LaTeX document
+    if ( $win == 0 ) {
+      die "\nLaTeXification produced non-zero return code.\n" .
+        "Check ${texfile} log file.\n"
+          if 0 != system "echo x | latex ${texfile} > /dev/null";
+    } else {
+      die "\nLaTeXification produced non-zero return code.\n" .
+        "Check ${texfile} log file.\n"
+          if 0 != system "latex ${texfile}";
+    }
+
+    # if all went well, generate eps using dvips
+    my $epsfilename = $nfig >= 2 ? "${basename}${i}.eps" : "${basename}.eps";
+    my $dvifile = $basetex.'.dvi';
+    if ( $win == 0 ) {
+      system "dvips -o ${epsfilename} -E -K ${dvifile} 2> /dev/null";
+    } else {
+      system "dvips -o ${epsfilename} -E -K ${dvifile}";
+    }
+    die "\nError: ${epsfilename} not generated!\n" unless -e $epsfilename;
+
+    # remove temporary files
+    if ( $win == 0 ) {
+      system "rm", "-f", (glob "$basetex.*");
+    } else {
+      system "del", (glob "$basetex.*");
+    }
+    print "done.\n";
+  }
+}
+
+
+=pod
+
+=head1 NAME
+
+mptoeps
+
+=head1 SYNOPSIS
+
+ mptoeps mpfile1 [mpfile2 mpfile3 ...]
+
+=head1 DESCRIPTION
+
+This script reads metapost input files and produces the corresponding
+figures in Encapsulated PostScript format.
+
+This is primarily used to address font inclusion problems when using
+standard (La)TeX font (i. e. Computer modern roman), which is not
+included into the PostScript produced by metapost. The idea is to
+include this latter figure into a fake LaTeX document, compile it
+and use dvips to get an EPS figure with fonts.
+
+If a metapost source file contains more than one figure, mptoeps
+appends a (hopefully) different number to the source file name for
+each picture.
+
+The (now standard) C<graphicx> LaTeX module is required. The C<.mp>
+suffix for metapost source files is not necessary.
+
+As it is, the script should more or less run under Windows also.
+Critical in this respect are external commands launched from 
+mptoeps using the C<system> command, so look there if something
+goes wrong.
+
+=head1 METAPOST ISSUES
+
+When using (La)TeX labels in your metapost figures, one may use
+TeX or LaTeX. What should one take care of ?
+
+If you want to use LaTeX labels, add the following line at
+the beginning of the metapost source file:
+
+ verbatimtex \documentclass{article}\begin{document} etex
+
+Then, you have to set the TEX environment variable accordingly, e.g.
+
+ setenv TEX latex
+
+under tcsh. I don't remember just now how one does it under Windows
+(Miktex), but it goes along the same line.
+
+
+=head1 AUTHOR
+
+Laurent Klinger, CRPP - EPFL, with much help from M. Jaegermann, who
+fixed the most poignant Perl horrors of the first version.
+
+=head1 BUGS
+
+I'll try to do the Windows version right one of these days.
+
+=head1 COPYRIGHT
+
+This program is free software. You may copy or redistribute it under
+the same terms as Perl itself.
+
+=cut

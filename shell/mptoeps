@@ -1,0 +1,56 @@
+#!/bin/bash
+# Written by Kong Hoon Lee <[email]konghoon@dreamwiz.com[/email]>, someday before 2001
+#
+# - This script can be used only with Bash shell
+# - LaTeX is required.
+#
+# Usage:
+#       mptoeps <filename | path of files>
+#
+# - Wildcards "*" or "?" can be used instead of <filename>.
+# - The converted "eps" files are stored in the current directory.
+#
+
+for NAME in $@;
+do
+if [ -f $NAME ]; then
+   HEADER=`grep -n '%!;PS' $NAME`
+   CREATOR=`grep -n '%%Creator' $NAME`
+
+   if [ "$HEADER" != "1:%!;PS" ] || [ "$CREATOR" != "3:%%Creator: MetaPost" ]
+   then continue; fi
+
+  dirname=${NAME%/*}
+  filename=${NAME##*/}
+  name_ext=${filename##*.}   
+  if [ "$name_ext" = "mps" ]; then continue; fi
+  name_base=${filename%.*}
+
+  newfile=${name_base}_${name_ext}.eps
+  newname=${name_base}_tmp_${name_ext}
+
+     if [ ! -f $newname.tex ]; then
+cat > $newname.tex << EOF
+\documentclass[a4paper,landscape]{article}
+\usepackage{graphicx}
+\pagestyle{empty}
+\setlength{\textheight}{13in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\headsep}{0.0in}
+\setlength{\topskip}{0in}
+\begin{document}
+\par\centerline{\includegraphics[scale=1.0]{$NAME}}
+\end{document}
+EOF
+
+        latex $newname >/dev/null 2>&1 \
+        && dvips -E $newname -o $newfile >/dev/null 2>&1
+        rm -f $newname.tex $newname.dvi $newname.log $newname.aux
+        echo "$NAME --> $newfile"
+     else
+        echo "Error: $newname.tex exists and conversion fails."
+     fi
+else
+  echo "$NAME is not a regular file."
+fi
+done

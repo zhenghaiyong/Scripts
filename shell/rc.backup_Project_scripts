@@ -1,0 +1,5 @@
+open 222.195.148.225
+login flyzhy flyzhyftp
+mirror -R Project
+mirror -R scripts
+bye

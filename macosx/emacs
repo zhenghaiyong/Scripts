@@ -1,0 +1,87 @@
+;; 启动窗口大小和位置
+;;******************************************************************
+;(setq default-frame-alist
+;      '((height . 35) (width . 125)))
+(defun arrange-frame (w h x y)
+  "Set the width, height, and x/y position of the current frame"
+  (let ((frame (selected-frame)))
+    (delete-other-windows)
+    (set-frame-position frame x y)
+    (set-frame-size frame w h)
+  )
+)
+(arrange-frame 120 30 400 0)
+
+;; 设定 PATH 和 exec-path
+(setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin:/opt/local/bin:/opt/local/sbin"))
+(setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin" "/opt/local/bin" "/opt/local/sbin")))
+
+;; ELPA - Emacs Lisp Package Archive
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+;; 文件选择或查找
+;;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(require 'ido)
+(ido-mode t)
+
+;; 加载常用功能库
+;;******************************************************************
+(require 'align)
+(require 'linum)
+
+;; 普通开关设置
+;;******************************************************************
+(auto-image-file-mode t)             ; 打开图片显示功能
+(auto-compression-mode t)            ; 打开自动解压缩功能
+(global-linum-mode t)                ; 打开行号
+(global-font-lock-mode t)            ; 语法高亮
+(global-hl-line-mode 1)              ; 高亮当前行
+(column-number-mode t)               ; 显示列号
+(show-paren-mode t)                  ; 显示括号匹配
+(if window-system
+	(tool-bar-mode -1))              ; 隐藏工具栏
+(setq kill-ring-max 200)             ; 设置 undo 次数
+(setq inhibit-startup-message t)     ; 关闭启动时闪屏
+;(setq visible-bell t)                ; 关闭出错时的提示声
+(setq default-major-mode 'text-mode) ; 默认启用 text 模式
+(setq display-time-mode 1)           ; 显示时间
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(setq display-time-format "%m/%d %H:%M")
+(display-time)
+(setq x-select-enable-clipboard t)   ; 支持 emacs 和外部程序的粘贴
+(setq frame-title-format '("" buffer-file-name ))
+                                     ; 在标题栏提示你目前在什么位置
+(setq confirm-kill-emacs 'y-or-n-p)  ; 退出时询问
+(fset 'yes-or-no-p 'y-or-n-p)        ; 以 y/n 代表 yes/no
+(setq-default tab-width 4)           ; Tab 缩进 4 个字符
+(setq-default indent-tabs-mode nil)
+(setq debug-on-error t)              ; 打开调试模式
+;(setq-default make-backup-files nil) ; 默认不要生成临时文件
+;; Place all backup copies of files in a common location
+;;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(setq make-backup-files t)
+(defconst use-backup-dir t)
+(setq backup-directory-alist (quote ((".*" . "~/.saves")))
+  version-control t                ; Use version numbers for backups
+  kept-new-versions 16             ; Number of newest versions to keep
+  kept-old-versions 2              ; Number of oldest versions to keep
+  delete-old-versions t            ; Ask to delete excess backup versions?
+  backup-by-copying-when-linked t) ; Copy linked files, don't rename.
+
+;; Emacs Muse
+;; http://www.mwolson.org/projects/EmacsMuse.html
+;;******************************************************************
+(load-file "~/.emacs.d/flyzhygg/muse-flyzhygg.el")
+
+;; Reload .emacs on the fly
+;;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(defun reload-dot-emacs()
+  (interactive)
+  (if(bufferp (get-file-buffer ".emacs"))
+    (save-buffer(get-buffer ".emacs")))
+  (load-file "~/.emacs")
+  (message ".emacs reloaded successfully"))

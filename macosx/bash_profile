@@ -1,0 +1,23 @@
+# \h:\w \u\$
+export PS1="\n\[\e[35;1m\][\A]\[\e[36;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[\e[32;1m\]\w\[\e[0m\][\$?]\n\$ " 
+
+# Color
+#alias ls='ls -G'
+export CLICOLOR=1
+#export LSCOLORS=exfxcxdxbxegedabagacad
+alias grep='grep --color=always'
+
+# IFS
+#http://www.cnblogs.com/cocowool/archive/2013/01/15/2861904.html
+#IFS=$(echo -en "\n\b")
+
+##
+# Your previous /Users/zhenghaiyong/.bash_profile file was backed up as /Users/zhenghaiyong/.bash_profile.macports-saved_2013-12-23_at_20:18:15
+##
+
+# MacPorts Installer addition on 2013-12-23_at_20:18:15: adding an appropriate PATH variable for use with MacPorts.
+# ZHY addition on 20131227: ~/bin
+# XQuartz-2.7.5 addition on 20131229: $PATH => /opt/X11/bin => /usr/X11/bin | /usr/X11R6/bin
+export PATH=~/bin:/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+

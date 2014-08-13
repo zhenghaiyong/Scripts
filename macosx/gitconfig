@@ -1,0 +1,5 @@
+[user]
+	name = zhenghaiyong
+	email = zhenghaiyong@gmail.com
+[core]
+	excludesfile = /Users/flyzhy/.gitignore_global

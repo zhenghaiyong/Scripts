@@ -1,0 +1,2 @@
+. ./export_proxy_ybb.sh
+youtube-dl -v -c --batch-file='CVPR2013-Tutorial-Saliency.list'

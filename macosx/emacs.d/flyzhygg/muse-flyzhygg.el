@@ -34,6 +34,7 @@
 (require 'muse-html)     ; load (X)HTML publishing style
 (require 'muse-ikiwiki)  ; load Ikiwiki support
 (require 'htmlize-hack)  ; work around htmlize bug with Emacs 23
+(require 'muse-mathjax)  ; MathJax
 (require 'muse-latex)    ; load LaTeX/PDF publishing styles
 (require 'muse-latex2png) ; publish <latex> tags
 (require 'muse-project)  ; load support for projects
@@ -183,49 +184,70 @@
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/research/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/research/"
                 :path "~/website/homepage/publish/research"))
+
+        ("ACDS" ("~/website/homepage/source/research/acds/"
+                     :force-publish ("index-homepage")
+                     :default "index")
+         (:base "my-xhtml"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/research/acds/"
+                :path "~/website/homepage/publish/research/acds"))
+
+        ("CB2014Fall" ("~/website/homepage/source/courses/cb/2014fall/"
+                     :force-publish ("index-homepage")
+                     :default "index")
+         (:base "my-xhtml"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/cb/2014fall/"
+                :path "~/website/homepage/publish/courses/cb/2014fall"))
+
+        ("CEC2014Fall" ("~/website/homepage/source/courses/cec/2014fall/"
+                     :force-publish ("index-homepage")
+                     :default "index")
+         (:base "my-xhtml"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/cec/2014fall/"
+                :path "~/website/homepage/publish/courses/cec/2014fall"))
 
         ("DSD20132" ("~/website/homepage/source/courses/dsd/20132/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/courses/dsd/20132/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/dsd/20132/"
                 :path "~/website/homepage/publish/courses/dsd/20132"))
 
         ("CEC20131" ("~/website/homepage/source/courses/cec/20131/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/courses/cec/20131/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/cec/20131/"
                 :path "~/website/homepage/publish/courses/cec/20131"))
 
         ("DSD20122" ("~/website/homepage/source/courses/dsd/20122/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/courses/dsd/20122/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/dsd/20122/"
                 :path "~/website/homepage/publish/courses/dsd/20122"))
 
         ("CEC20121" ("~/website/homepage/source/courses/cec/20121/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/courses/cec/20121/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/cec/20121/"
                 :path "~/website/homepage/publish/courses/cec/20121"))
 
         ("Courses" ("~/website/homepage/source/courses/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/courses/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/"
                 :path "~/website/homepage/publish/courses"))
 
         ("Projects" ("~/website/homepage/source/projects/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/projects/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/projects/"
                 :path "~/website/homepage/publish/projects"))
 
         ("Blog" (,@(muse-project-alist-dirs "~/website/homepage/source/blog")
@@ -242,24 +264,24 @@
             "~/website/homepage/source/blog"
             "~/website/homepage/publish/blog"
             "ikiwiki"
-            :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/blog/"))
+            :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/blog/"))
 
         ("FlyZhyGG" ("~/website/homepage/source/flyzhygg/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/flyzhygg/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/flyzhygg/"
                 :path "~/website/homepage/publish/flyzhygg"))
 
         ("Home" ("~/website/homepage/source/home"
                     :force-publish ("index-homepage")
                     :default "index")
          (:base "my-xhtml"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/"
                 :include "/[^/]+"
                 :path "~/website/homepage/publish")
          (:base "my-pdf"
-                :base-url "http://ipl.ouc.edu.cn/~zhenghaiyong/"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/"
                 :path "~/website/homepage/publish"
                 :include "/\\(CurriculumVitae\\|BriefResume\\)[^/]*$"))
         ))
@@ -271,7 +293,7 @@
         ("ArchWiki" . "http://gnuarch.org/gnuarchwiki/")
         ("HCoopWiki" . "http://wiki.hcoop.net/")
         ;; abbreviations
-        ("ZHY" . "http://ipl.ouc.edu.cn/~zhenghaiyong/")
+        ("ZHY" . "http://vision.ouc.edu.cn/~zhenghaiyong/")
         ("MWOLSON" . "http://www.mwolson.org/")
         ("CERIAS" . "http://www.cerias.purdue.edu/")
         ("PlannerMode" . "http://www.emacswiki.org/cgi-bin/wiki/PlannerMode")
@@ -290,7 +312,7 @@
   (when str
     (save-match-data
       (if (string-match "\\`[/.]+" str)
-          (replace-match "http://ipl.ouc.edu.cn/~zhenghaiyong/" nil t str)
+          (replace-match "http://vision.ouc.edu.cn/~zhenghaiyong/" nil t str)
         str))))
 
 ;; Make sure my interproject links become absolute when published in
@@ -361,7 +383,7 @@ If FILE is not specified, use the published version of the current file."
       ;; make relative links work
       (goto-char (point-min))
       (while (re-search-forward "href=\"[/.]+" nil t)
-        (replace-match "href=\"http://ipl.ouc.edu.cn/~zhenghaiyong/" nil t))
+        (replace-match "href=\"http://vision.ouc.edu.cn/~zhenghaiyong/" nil t))
       ;; copy entry to clipboard
       (clipboard-kill-ring-save (point-min) (point-max))
       (message "Copied blog entry to clipboard"))))

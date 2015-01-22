@@ -1,0 +1,6 @@
+#!/bin/bash
+# MacOS /Users/flyzhy/project/2012-电波所电离层项目-结题/
+echo -ne "##### 同步 MacOS /Users/flyzhy/project/2012-电波所电离层项目-结题/ #####\n"
+rsync -vaH --progress --delete -e ssh root@222.195.149.61:/iplouc/Prof.JiGR/project/2012-电波所电离层项目-结题/ /Users/flyzhy/project/2012-电波所电离层项目-结题/
+echo
+echo -ne "##### 同步结束 #####\n"

@@ -1,0 +1,13 @@
+#!/bin/bash
+# MacOS /Users/flyzhy/project/reference/2012-NSFC/
+echo -ne "##### 同步 MacOS /Users/flyzhy/project/reference/2012-NSFC/ #####\n"
+rsync -vaH --progress --delete -e ssh root@222.195.149.61:/iplouc/Prof.JiGR/project/2012-NSFC/ /Users/flyzhy/project/reference/2012-NSFC/
+# MacOS /Users/flyzhy/research/0-HAB/
+echo -ne "##### 同步 MacOS /Users/flyzhy/research/0-HAB/ #####\n"
+rsync -vaH --progress --delete -e ssh root@222.195.149.61:/iplouc/Prof.JiGR/project/2012-NSFC-基于生物形态特征的中国海常见有害赤潮藻显微图像识别（拟）/1-参考文献/ /Users/flyzhy/research/0-HAB/
+echo
+# MacOS /Users/flyzhy/research/1-ionogram/
+echo -ne "##### 同步 MacOS /Users/flyzhy/research/1-ionogram/ #####\n"
+rsync -vaH --progress --delete -e ssh root@222.195.149.61:/iplouc/Prof.JiGR/project/2012-NSFC-基于图像分析的电离层垂直探测频高图自动解译及度量（拟）/1-参考文献/ /Users/flyzhy/research/1-ionogram/
+echo
+echo -ne "##### 同步结束 #####\n"

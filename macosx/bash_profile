@@ -10,6 +10,7 @@ alias grep='grep --color=always'
 alias zhenghaiyonglinode='expect ~/bin/wuzidinglinode.sh'
 alias zhenghaiyongaliyunqd='expect ~/bin/huizhialiyun.sh'
 alias zhenghaiyongaliyunhk='expect ~/bin/wuzidingaliyun.sh'
+alias zhenghaiyonglinodevalseonline='expect ~/bin/valseonlinelinode.sh'
 
 # IFS
 # http://www.cnblogs.com/cocowool/archive/2013/01/15/2861904.html

@@ -180,6 +180,13 @@
 
 (setq muse-project-alist
       `(
+        ("ACDS" ("~/website/homepage/source/research/acds/"
+                     :force-publish ("index-homepage")
+                     :default "index")
+         (:base "my-xhtml"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/research/acds/"
+                :path "~/website/homepage/publish/research/acds"))
+
         ("Research" ("~/website/homepage/source/research/"
                      :force-publish ("index-homepage")
                      :default "index")
@@ -187,12 +194,19 @@
                 :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/research/"
                 :path "~/website/homepage/publish/research"))
 
-        ("ACDS" ("~/website/homepage/source/research/acds/"
+        ("CV2015Spring" ("~/website/homepage/source/courses/cv/2015spring/"
                      :force-publish ("index-homepage")
                      :default "index")
          (:base "my-xhtml"
-                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/research/acds/"
-                :path "~/website/homepage/publish/research/acds"))
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/cv/2015spring/"
+                :path "~/website/homepage/publish/courses/cv/2015spring"))
+
+        ("EC2015Spring" ("~/website/homepage/source/courses/ec/2015spring/"
+                     :force-publish ("index-homepage")
+                     :default "index")
+         (:base "my-xhtml"
+                :base-url "http://vision.ouc.edu.cn/~zhenghaiyong/courses/ec/2015spring/"
+                :path "~/website/homepage/publish/courses/ec/2015spring"))
 
         ("CB2014Fall" ("~/website/homepage/source/courses/cb/2014fall/"
                      :force-publish ("index-homepage")

@@ -6,6 +6,7 @@ export PS1="\n\[\e[35;1m\][\A]\[\e[36;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[
 export CLICOLOR=1
 #export LSCOLORS=exfxcxdxbxegedabagacad
 alias grep='grep --color=always'
+alias wget-dir='wget -c -r -np -k -L -p'
 #alias zhenghaiyonglinode='ssh zhenghaiyong@104.237.153.139'
 alias zhenghaiyonglinode='expect ~/bin/wuzidinglinode.sh'
 alias zhenghaiyongaliyunqd='expect ~/bin/huizhialiyun.sh'
